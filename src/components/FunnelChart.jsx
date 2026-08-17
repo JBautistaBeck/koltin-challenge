@@ -1,7 +1,40 @@
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import { ETAPAS, TRIGGERS, ORDEN_CUADRANTES, CUADRANTES } from '../data/constants.js';
 
 const CHART_HEIGHT = 260;
+
+// Línea punteada que marca el corte entre "todavía puede pasar cualquier
+// cosa" (esperando pago) y el vencimiento en sí (pagado o vencido).
+function VencimientoDivider() {
+  return (
+    <div
+      style={{
+        flexShrink: 0,
+        width: 20,
+        height: 30 + CHART_HEIGHT,
+        alignSelf: 'flex-start',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+      }}
+    >
+      <div style={{ height: 30, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <span
+          style={{
+            fontSize: 9.5,
+            fontWeight: 800,
+            color: 'var(--ink-faint)',
+            letterSpacing: '0.05em',
+            whiteSpace: 'nowrap',
+          }}
+        >
+          VENCIMIENTO
+        </span>
+      </div>
+      <div style={{ flex: 1, borderLeft: '2px dashed var(--border-strong)' }} />
+    </div>
+  );
+}
 
 export default function FunnelChart({ conteos, maxTotal, filtro, onSegmentClick, onColumnClick }) {
   const [hoverTrigger, setHoverTrigger] = useState(null);
@@ -17,7 +50,9 @@ export default function FunnelChart({ conteos, maxTotal, filtro, onSegmentClick,
           const etapaSeleccionada = filtro.etapa === etapa.key;
 
           return (
-            <div key={etapa.key} style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', alignItems: 'stretch' }}>
+            <Fragment key={etapa.key}>
+              {etapa.key === 'pagado_renovado' && <VencimientoDivider />}
+              <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', alignItems: 'stretch' }}>
               <div style={{ height: 30, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
                 {trigger && (
                   <button
@@ -158,7 +193,8 @@ export default function FunnelChart({ conteos, maxTotal, filtro, onSegmentClick,
                 </span>
                 <span style={{ fontSize: 11, color: 'var(--ink-faint)', fontWeight: 600 }}>{total}</span>
               </button>
-            </div>
+              </div>
+            </Fragment>
           );
         })}
       </div>

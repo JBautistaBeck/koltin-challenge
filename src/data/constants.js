@@ -40,7 +40,7 @@ export const ETAPAS = [
   {
     key: 'link_pago_enviado',
     orden: 5,
-    label: 'Link de pago enviado',
+    label: 'Esperando pago (Link enviado)',
     labelCorto: 'Link enviado',
     quePasa: 'Está esperando pagar la renovación.',
     accion: 'Si quedan menos de 14 días para vencer y no pagó, escalar a llamada directa del renovador (urgente).',

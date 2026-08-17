@@ -173,7 +173,7 @@ export default function Slide05Funnel() {
           <FlowBox box={POS.contactado} numero={2} label="Contactado para EDL" accent="var(--border-strong)" />
           <FlowBox box={POS.edlAgendado} numero={3} label="EDL agendado" accent="var(--border-strong)" />
           <FlowBox box={POS.edlCompletado} numero={4} label="EDL completado" accent="var(--border-strong)" />
-          <FlowBox box={POS.linkPago} numero={5} label="Link de pago enviado" accent="var(--ink)" sub="convergen los dos caminos" />
+          <FlowBox box={POS.linkPago} numero={5} label="Esperando pago (Link enviado)" accent="var(--ink)" sub="convergen los dos caminos" />
           <FlowBox box={POS.pagado} numero={6} label="Pagado / renovado" accent="var(--verde)" />
           <FlowBox box={POS.vencido} numero={7} label="Vencido sin renovar" accent="var(--rojo)" />
           <FlowBox box={POS.sinEdl} letra="B" label="Sin EDL: link directo" accent="var(--naranja)" />
