@@ -101,6 +101,16 @@ export const TRIGGER_PAGO_ANTICIPADO = {
     'Trigger automático (camino B): si a los 14 días totales no respondió ni agendó el EDL, WhatsApp con oferta de pago anticipado (2 meses antes del vencimiento) + MSI, con el link de pago enviado directo — sin el descuento vinculado al EDL.',
 };
 
+// Trigger de la regla de urgencia (transversal a los dos caminos, dispara
+// dentro del nodo "Esperando pago"). También solo para la presentación.
+export const TRIGGER_ALERTA_URGENCIA = {
+  key: 'alerta_urgencia',
+  icono: '🚨',
+  label: 'Alerta de urgencia',
+  tooltip:
+    'Trigger automático: si faltan menos de 14 días para vencer y no pagó, se dispara una alerta al equipo de renovación para que llame directamente.',
+};
+
 // Orden de apilado de los segmentos de color en cada columna (de abajo hacia arriba).
 export const ORDEN_CUADRANTES = ['prioridad_maxima', 'cuidar_vinculo', 'meter_en_orbita', 'se_retiene_solo'];
 

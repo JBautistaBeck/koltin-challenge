@@ -1,5 +1,5 @@
 import SlideShell, { Nota } from './SlideShell.jsx';
-import { TRIGGERS, TRIGGER_PAGO_ANTICIPADO } from '../../data/constants.js';
+import { TRIGGERS, TRIGGER_PAGO_ANTICIPADO, TRIGGER_ALERTA_URGENCIA } from '../../data/constants.js';
 
 // Diagrama de flujo dibujado a mano con SVG (líneas/rombo) + divs superpuestos
 // (cajas, textos, íconos), todo sobre el mismo sistema de coordenadas en px.
@@ -18,7 +18,7 @@ const POS = {
   contactado: { x: 170, y: 20, ...BOX },
   edlAgendado: { x: 340, y: 20, ...BOX },
   edlCompletado: { x: 490, y: 20, ...BOX },
-  linkPago: { x: 640, y: 90, w: 150, h: 160 },
+  linkPago: { x: 640, y: 140, w: 150, h: 60 },
   pagado: { x: 810, y: 20, ...BOX_END },
   sinEdl: { x: 340, y: 260, ...BOX },
   vencido: { x: 810, y: 260, ...BOX_END },
@@ -107,9 +107,8 @@ export default function Slide05Funnel() {
   const diamondBottom = { x: DIAMOND_CENTER.x, y: DIAMOND_CENTER.y + DIAMOND.hh };
   const diamondLeft = { x: DIAMOND_CENTER.x - DIAMOND.hw, y: DIAMOND_CENTER.y };
 
-  const linkTop = { x: POS.linkPago.x, y: POS.linkPago.y + 40 };
-  const linkBottom = { x: POS.linkPago.x, y: POS.linkPago.y + POS.linkPago.h - 40 };
-  const linkRight = { x: POS.linkPago.x + POS.linkPago.w, y: POS.linkPago.y + POS.linkPago.h / 2 };
+  const linkEntrada = left(POS.linkPago);
+  const linkRight = right(POS.linkPago);
 
   const paths = [
     linea(right(POS.vence90), left(POS.contactado)),
@@ -117,8 +116,8 @@ export default function Slide05Funnel() {
     curvaS(diamondRight, left(POS.edlAgendado)),
     curvaS(diamondRight, left(POS.sinEdl)),
     linea(right(POS.edlAgendado), left(POS.edlCompletado)),
-    curvaS(right(POS.edlCompletado), linkTop),
-    curvaS(right(POS.sinEdl), linkBottom),
+    curvaS(right(POS.edlCompletado), linkEntrada),
+    curvaS(right(POS.sinEdl), linkEntrada),
     curvaS(linkRight, left(POS.pagado)),
     curvaS(linkRight, left(POS.vencido)),
   ];
@@ -173,7 +172,7 @@ export default function Slide05Funnel() {
           <FlowBox box={POS.contactado} numero={2} label="Contactado para EDL" accent="var(--border-strong)" />
           <FlowBox box={POS.edlAgendado} numero={3} label="EDL agendado" accent="var(--border-strong)" />
           <FlowBox box={POS.edlCompletado} numero={4} label="EDL completado" accent="var(--border-strong)" />
-          <FlowBox box={POS.linkPago} numero={5} label="Esperando pago (Link enviado)" accent="var(--ink)" sub="convergen los dos caminos" />
+          <FlowBox box={POS.linkPago} numero={5} label="Esperando pago (Link enviado)" accent="var(--border-strong)" />
           <FlowBox box={POS.pagado} numero={6} label="Pagado / renovado" accent="var(--verde)" />
           <FlowBox box={POS.vencido} numero={7} label="Vencido sin renovar" accent="var(--rojo)" />
           <FlowBox box={POS.sinEdl} letra="B" label="Sin EDL: link directo" accent="var(--naranja)" />
@@ -182,11 +181,12 @@ export default function Slide05Funnel() {
           <TriggerBadge x={topCenter(POS.contactado).x} y={POS.contactado.y - 20} trigger={triggerPorKey.fup_7dias} />
           <TriggerBadge x={topCenter(POS.edlCompletado).x} y={POS.edlCompletado.y - 20} trigger={triggerPorKey.descuento_msi} />
           <TriggerBadge x={topCenter(POS.sinEdl).x} y={POS.sinEdl.y - 20} trigger={TRIGGER_PAGO_ANTICIPADO} />
+          <TriggerBadge x={topCenter(POS.linkPago).x} y={POS.linkPago.y - 20} trigger={TRIGGER_ALERTA_URGENCIA} />
         </div>
       </div>
 
       <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', fontSize: 12, color: 'var(--ink-soft)', marginBottom: 16 }}>
-        {[...TRIGGERS, TRIGGER_PAGO_ANTICIPADO].map((t) => (
+        {[...TRIGGERS, TRIGGER_PAGO_ANTICIPADO, TRIGGER_ALERTA_URGENCIA].map((t) => (
           <div key={t.key} style={{ display: 'flex', alignItems: 'center', gap: 6, maxWidth: 260 }}>
             <span>{t.icono}</span>
             <span>{t.tooltip}</span>
