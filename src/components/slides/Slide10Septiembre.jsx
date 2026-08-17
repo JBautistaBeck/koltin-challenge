@@ -48,7 +48,7 @@ export default function Slide10Septiembre() {
       </div>
 
       <p style={{ margin: 0 }}>
-        La razón del recorte: septiembre es una ventana corta y el equipo no es técnico. Mejor un sistema simple
+        La razón del recorte: septiembre es una ventana corta. Mejor un sistema simple
         funcionando de punta a punta que uno sofisticado a medio terminar cuando llegue octubre.
       </p>
     </SlideShell>

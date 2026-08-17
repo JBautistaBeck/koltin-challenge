@@ -44,7 +44,7 @@ function AgentCard({ icono, titulo, texto, etapas }) {
 
 export default function Slide08MVP() {
   return (
-    <SlideShell kicker="El MVP" title="Qué se construyó" wide>
+    <SlideShell kicker="El MVP" title="Producto" wide>
       <p style={{ margin: '0 0 14px' }}>
         Propongo una app de seguimiento del funnel que arranca apenas el cliente entra a la ventana de ≤90 días. A
         partir de ahí, dos agentes automáticos (por WhatsApp) se reparten el trabajo:
@@ -94,6 +94,8 @@ export default function Slide08MVP() {
           to="/"
           className="btn btn-primary"
           style={{ fontSize: 15.5, padding: '14px 28px', textDecoration: 'none' }}
+          target="_blank"
+  rel="noopener noreferrer"
         >
           Ver la herramienta en vivo →
         </Link>
