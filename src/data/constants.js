@@ -102,10 +102,13 @@ export const TRIGGER_PAGO_ANTICIPADO = {
 };
 
 // Trigger de la regla de urgencia (transversal a los dos caminos, dispara
-// dentro del nodo "Esperando pago"). También solo para la presentación.
+// dentro del nodo "Esperando pago"). A diferencia de TRIGGER_PAGO_ANTICIPADO,
+// éste sí aplica a cualquiera en esa columna (no depende del camino), así que
+// también se muestra en el funnel de la app.
 export const TRIGGER_ALERTA_URGENCIA = {
   key: 'alerta_urgencia',
-  icono: '🚨',
+  antesDeEtapa: 'link_pago_enviado',
+  icono: '5️⃣',
   label: 'Alerta de urgencia',
   tooltip:
     'Trigger automático: si faltan menos de 14 días para vencer y no pagó, se dispara una alerta al equipo de renovación para que llame directamente.',

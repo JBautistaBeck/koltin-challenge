@@ -1,5 +1,7 @@
 import { Fragment, useState } from 'react';
-import { ETAPAS, TRIGGERS, ORDEN_CUADRANTES, CUADRANTES } from '../data/constants.js';
+import { ETAPAS, TRIGGERS, TRIGGER_ALERTA_URGENCIA, ORDEN_CUADRANTES, CUADRANTES } from '../data/constants.js';
+
+const TODOS_LOS_TRIGGERS = [...TRIGGERS, TRIGGER_ALERTA_URGENCIA];
 
 const CHART_HEIGHT = 260;
 
@@ -43,7 +45,7 @@ export default function FunnelChart({ conteos, maxTotal, filtro, onSegmentClick,
     <div>
       <div style={{ display: 'flex', alignItems: 'flex-end', gap: 6, position: 'relative' }}>
         {ETAPAS.map((etapa) => {
-          const trigger = TRIGGERS.find((t) => t.antesDeEtapa === etapa.key);
+          const trigger = TODOS_LOS_TRIGGERS.find((t) => t.antesDeEtapa === etapa.key);
           const etapaConteo = conteos[etapa.key] || { total: 0 };
           const total = etapaConteo.total || 0;
           const colHeight = maxTotal > 0 ? Math.max((total / maxTotal) * CHART_HEIGHT, total > 0 ? 6 : 0) : 0;
@@ -187,9 +189,10 @@ export default function FunnelChart({ conteos, maxTotal, filtro, onSegmentClick,
                     lineHeight: 1.25,
                     textDecoration: etapaSeleccionada ? 'underline' : 'none',
                     textUnderlineOffset: 3,
+                    whiteSpace: etapa.key === 'link_pago_enviado' ? 'nowrap' : 'normal',
                   }}
                 >
-                  {etapa.label}
+                  {etapa.key === 'link_pago_enviado' ? etapa.labelCorto : etapa.label}
                 </span>
                 <span style={{ fontSize: 11, color: 'var(--ink-faint)', fontWeight: 600 }}>{total}</span>
               </button>
