@@ -84,6 +84,7 @@ export default function FunnelChart({ conteos, maxTotal, filtro, onSegmentClick,
                     const cuadrante = CUADRANTES[cKey];
                     const activo = filtro.etapa === etapa.key && filtro.cuadrante === cKey;
                     const atenuado = filtro.etapa && !(filtro.etapa === etapa.key && (filtro.cuadrante === null || filtro.cuadrante === cKey));
+                    const segHeight = total > 0 ? (count / total) * colHeight : 0;
                     return (
                       <button
                         key={cKey}
@@ -102,8 +103,26 @@ export default function FunnelChart({ conteos, maxTotal, filtro, onSegmentClick,
                           outlineOffset: -2,
                           transition: 'opacity 0.12s ease',
                           padding: 0,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
                         }}
-                      />
+                      >
+                        {segHeight >= 12 && (
+                          <span
+                            style={{
+                              fontSize: 10.5,
+                              fontWeight: 800,
+                              color: '#fff',
+                              textShadow: '0 1px 2px rgba(0,0,0,0.35)',
+                              lineHeight: 1,
+                              pointerEvents: 'none',
+                            }}
+                          >
+                            {count}
+                          </span>
+                        )}
+                      </button>
                     );
                   })}
                 </div>
