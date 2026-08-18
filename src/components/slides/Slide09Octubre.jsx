@@ -21,12 +21,6 @@ export default function Slide09Octubre() {
           ya dudó del precio.
         </li>
       </ul>
-
-      <Nota>
-        Esto excede lo que el equipo de renovadores puede ejecutar solo — necesita alineación con Marketing/Comms
-        sobre el mensaje del aumento. Se documenta acá porque octubre es el momento en que el sistema de retención
-        se pone a prueba de verdad.
-      </Nota>
     </SlideShell>
   );
 }

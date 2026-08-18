@@ -77,16 +77,7 @@ export default function Slide08MVP() {
             'Los mensajes de WhatsApp por cuadrante y por camino',
           ]}
         />
-        <Columna
-          titulo="🔧 MOCK (no conectado)"
-          color="var(--naranja)"
-          items={[
-            '100 clientes fake (nombres, fechas, montos)',
-            'No hay integración real con HubSpot ni con WhatsApp',
-            'Los agentes no agendan turnos ni cobran de verdad — se simulan',
-            '"Copiar mensaje" es la única acción real',
-          ]}
-        />
+
       </div>
 
       <div style={{ display: 'flex', justifyContent: 'center' }}>

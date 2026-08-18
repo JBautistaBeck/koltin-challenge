@@ -1,106 +1,181 @@
 import SlideShell, { Nota } from './SlideShell.jsx';
 import { CUADRANTES } from '../../data/constants.js';
 
-const SIZE = 420;
-const HALF = SIZE / 2;
+function Chip({ children }) {
+  return (
+    <span
+      style={{
+        display: 'inline-flex',
+        fontSize: 11.5,
+        fontWeight: 700,
+        color: 'var(--ink)',
+        background: '#F1EFE9',
+        border: '1px solid var(--border-strong)',
+        borderRadius: 999,
+        padding: '4px 10px',
+        whiteSpace: 'nowrap',
+      }}
+    >
+      {children}
+    </span>
+  );
+}
 
-// Muestra real tomada del dataset de clientes (src/data/clients.json):
-// ~6 por cuadrante, elegidos para cubrir bien el rango de cada eje — no son
-// inventados, son (riesgo, engagement, cuadrante) de clientes fake reales.
-const PUNTOS = [
-  { r: 60, e: 6, q: 'prioridad_maxima' },
-  { r: 64, e: 10, q: 'prioridad_maxima' },
-  { r: 50, e: 11, q: 'prioridad_maxima' },
-  { r: 63, e: 15, q: 'prioridad_maxima' },
-  { r: 82, e: 38, q: 'prioridad_maxima' },
-  { r: 58, e: 47, q: 'prioridad_maxima' },
-  { r: 75, e: 62, q: 'cuidar_vinculo' },
-  { r: 56, e: 67, q: 'cuidar_vinculo' },
-  { r: 63, e: 72, q: 'cuidar_vinculo' },
-  { r: 55, e: 77, q: 'cuidar_vinculo' },
-  { r: 65, e: 84, q: 'cuidar_vinculo' },
-  { r: 52, e: 91, q: 'cuidar_vinculo' },
-  { r: 38, e: 7, q: 'meter_en_orbita' },
-  { r: 16, e: 11, q: 'meter_en_orbita' },
-  { r: 13, e: 15, q: 'meter_en_orbita' },
-  { r: 35, e: 37, q: 'meter_en_orbita' },
-  { r: 40, e: 42, q: 'meter_en_orbita' },
-  { r: 35, e: 47, q: 'meter_en_orbita' },
-  { r: 46, e: 62, q: 'se_retiene_solo' },
-  { r: 41, e: 67, q: 'se_retiene_solo' },
-  { r: 21, e: 69, q: 'se_retiene_solo' },
-  { r: 4, e: 71, q: 'se_retiene_solo' },
-  { r: 49, e: 73, q: 'se_retiene_solo' },
-  { r: 44, e: 89, q: 'se_retiene_solo' },
-];
+function Medidor() {
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+      <span style={{ fontSize: 9.5, color: 'var(--ink-faint)', fontWeight: 700 }}>0</span>
+      <div
+        style={{
+          flex: 1,
+          height: 7,
+          borderRadius: 999,
+          background: 'linear-gradient(90deg, #F1EFE9, var(--ink))',
+          border: '1px solid var(--border-strong)',
+        }}
+      />
+      <span style={{ fontSize: 9.5, color: 'var(--ink-faint)', fontWeight: 700 }}>100</span>
+    </div>
+  );
+}
 
-const xFor = (engagement) => (engagement / 100) * SIZE;
-const yFor = (riesgo) => SIZE - (riesgo / 100) * SIZE;
+function EjeBlock({ titulo, chips, nota, width }) {
+  return (
+    <div className="card" style={{ padding: '16px 18px', width, display: 'flex', flexDirection: 'column', gap: 10 }}>
+      <div style={{ fontWeight: 800, fontSize: 14 }}>{titulo}</div>
+      
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+        {chips.map((c) => (
+          <Chip key={c}>{c}</Chip>
+        ))}
+      </div>
+      {nota && <div style={{ fontSize: 11, color: 'var(--ink-faint)', fontStyle: 'italic' }}>{nota}</div>}
+    </div>
+  );
+}
 
-const QUADRANT_LABEL_POS = {
-  prioridad_maxima: { x: 14, y: 24, anchor: 'start' },
-  cuidar_vinculo: { x: SIZE - 14, y: 24, anchor: 'end' },
-  meter_en_orbita: { x: 14, y: SIZE - 16, anchor: 'start' },
-  se_retiene_solo: { x: SIZE - 14, y: SIZE - 16, anchor: 'end' },
-};
+function Flecha({ direccion, texto }) {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, padding: '0 4px' }}>
+      <span style={{ fontSize: 20, lineHeight: 1, color: 'var(--ink-faint)' }}>{direccion === 'abajo' ? '↓' : '→'}</span>
+      <span
+        style={{
+          fontSize: 9.5,
+          fontWeight: 700,
+          color: 'var(--ink-faint)',
+          textAlign: 'center',
+          lineHeight: 1.25,
+          maxWidth: 76,
+        }}
+      >
+        {texto}
+      </span>
+    </div>
+  );
+}
+
+function Celda({ q }) {
+  const c = CUADRANTES[q];
+  return (
+    <div
+      style={{
+        background: c.colorSuave,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        textAlign: 'center',
+        padding: 10,
+      }}
+    >
+      <span style={{ fontSize: 13.5, fontWeight: 800, color: c.colorTexto, lineHeight: 1.25 }}>{c.label}</span>
+    </div>
+  );
+}
 
 export default function Slide07Scoring() {
   return (
     <SlideShell kicker="Metodología" title="Cómo funciona el scoring" wide>
-      <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 14 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-          <div style={{ width: 150, textAlign: 'right', flexShrink: 0 }}>
-            <div style={{ fontSize: 13.5, fontWeight: 800 }}>Riesgo →</div>
-            <div style={{ fontSize: 10.5, color: 'var(--ink-faint)', marginTop: 2, lineHeight: 1.4 }}>
-              % aumento, edad, inactividad
-            </div>
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'auto auto auto auto',
+            justifyContent: 'center',
+            alignItems: 'center',
+            rowGap: 10,
+            columnGap: 6,
+          }}
+        >
+          {/* fila 1: nada bajo Riesgo/flecha/eje-Y, el bloque Engagement arriba de la matriz */}
+          <div />
+          <div />
+          <div />
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
+            <EjeBlock
+              titulo="Eje Engagement (0-100)"
+              chips={['EDL completado', 'Uso de Casa Koltin']}
+              nota="alcanza con una de las dos"
+              width={320}
+            />
+            <Flecha direccion="abajo" texto="define el eje horizontal" />
           </div>
 
+          {/* fila 2: bloque Riesgo → flecha → "Riesgo ↑" → matriz, todo centrado verticalmente */}
+          <div style={{ alignSelf: 'center' }}>
+            <EjeBlock
+              titulo="Eje Riesgo (0-100)"
+              chips={['% aumento de precio', 'Edad (bucket)', 'Días sin interacción']}
+              width={190}
+            />
+          </div>
+          <div style={{ alignSelf: 'center' }}>
+            <Flecha direccion="arriba" texto="define el eje vertical" />
+          </div>
+          <div style={{ alignSelf: 'stretch', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <span
+              style={{
+                writingMode: 'vertical-rl',
+                transform: 'rotate(180deg)',
+                fontSize: 13,
+                fontWeight: 800,
+                color: 'var(--ink)',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              Riesgo →
+            </span>
+          </div>
           <div>
-            <div style={{ borderRadius: 12, overflow: 'hidden', border: '1px solid var(--border-strong)' }}>
-              <svg width={SIZE} height={SIZE} style={{ display: 'block' }}>
-                <rect x={0} y={0} width={HALF} height={HALF} fill={CUADRANTES.prioridad_maxima.colorSuave} />
-                <rect x={HALF} y={0} width={HALF} height={HALF} fill={CUADRANTES.cuidar_vinculo.colorSuave} />
-                <rect x={0} y={HALF} width={HALF} height={HALF} fill={CUADRANTES.meter_en_orbita.colorSuave} />
-                <rect x={HALF} y={HALF} width={HALF} height={HALF} fill={CUADRANTES.se_retiene_solo.colorSuave} />
-
-                <line x1={HALF} y1={0} x2={HALF} y2={SIZE} style={{ stroke: 'var(--border-strong)', strokeWidth: 1.5, strokeDasharray: '4 4' }} />
-                <line x1={0} y1={HALF} x2={SIZE} y2={HALF} style={{ stroke: 'var(--border-strong)', strokeWidth: 1.5, strokeDasharray: '4 4' }} />
-
-                {Object.entries(QUADRANT_LABEL_POS).map(([qKey, pos]) => (
-                  <text
-                    key={qKey}
-                    x={pos.x}
-                    y={pos.y}
-                    textAnchor={pos.anchor}
-                    style={{ fontSize: 12.5, fontWeight: 800, fill: CUADRANTES[qKey].colorTexto }}
-                  >
-                    {CUADRANTES[qKey].label}
-                  </text>
-                ))}
-
-                {PUNTOS.map((p, i) => (
-                  <circle
-                    key={i}
-                    cx={xFor(p.e)}
-                    cy={yFor(p.r)}
-                    r={5.5}
-                    style={{ fill: CUADRANTES[p.q].color, stroke: '#fff', strokeWidth: 1.5 }}
-                  />
-                ))}
-              </svg>
-            </div>
-
-            <div style={{ textAlign: 'center', marginTop: 8 }}>
-              <div style={{ fontSize: 13.5, fontWeight: 800 }}>Engagement →</div>
-              <div style={{ fontSize: 10.5, color: 'var(--ink-faint)', marginTop: 2 }}>EDL, uso de Casa Koltin</div>
+            <div
+              style={{
+                width: 320,
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr',
+                gridTemplateRows: '1fr 1fr',
+                gap: 2,
+                aspectRatio: '2 / 1.15',
+                borderRadius: 12,
+                overflow: 'hidden',
+                border: '1px solid var(--border-strong)',
+              }}
+            >
+              <Celda q="prioridad_maxima" />
+              <Celda q="cuidar_vinculo" />
+              <Celda q="meter_en_orbita" />
+              <Celda q="se_retiene_solo" />
             </div>
           </div>
+
+          {/* fila 3: etiqueta del eje X, debajo de la matriz */}
+          <div />
+          <div />
+          <div />
+          <div style={{ textAlign: 'center', fontSize: 13, fontWeight: 800 }}>Engagement →</div>
         </div>
       </div>
 
-      <p style={{ margin: '0 0 12px', fontSize: 13, color: 'var(--ink-faint)', textAlign: 'center' }}>
-        Corte: ≥ 50/100 en cada eje. Cada punto es un cliente real del dataset del prototipo.
+      <p style={{ margin: '18px 0 12px', fontSize: 13, color: 'var(--ink-faint)', textAlign: 'center' }}>
+        Corte: ≥ 50/100 en cada eje.
       </p>
 
       <Nota>

@@ -21,11 +21,6 @@ export default function Slide11Metricas() {
           </div>
         ))}
       </div>
-
-      <Nota>
-        En 30 días: la señal temprana de que el sistema funciona es que el % de EDL completado subió y que el % de
-        renovación empezó a moverse hacia el 93%.
-      </Nota>
     </SlideShell>
   );
 }
