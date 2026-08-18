@@ -9,7 +9,6 @@ import Slide05Funnel from '../components/slides/Slide05Funnel.jsx';
 import Slide07Scoring from '../components/slides/Slide07Scoring.jsx';
 import Slide08MVP from '../components/slides/Slide08MVP.jsx';
 import Slide09Octubre from '../components/slides/Slide09Octubre.jsx';
-import Slide10Septiembre from '../components/slides/Slide10Septiembre.jsx';
 import Slide11Metricas from '../components/slides/Slide11Metricas.jsx';
 import Slide12Cierre from '../components/slides/Slide12Cierre.jsx';
 
@@ -22,7 +21,6 @@ const SLIDES = [
   Slide07Scoring,
   Slide08MVP,
   Slide09Octubre,
-  Slide10Septiembre,
   Slide11Metricas,
   Slide12Cierre,
 ];
