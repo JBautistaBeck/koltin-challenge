@@ -193,12 +193,6 @@ export default function Slide05Funnel() {
           </div>
         ))}
       </div>
-
-      <Nota>
-        <strong>Regla de urgencia transversal:</strong> si a alguien le quedan menos de 14 días para vencer y todavía
-        no pagó el link, se marca como urgente para que un renovador lo llame directamente. Es la única salida
-        manual del sistema — todo lo demás corre por WhatsApp automático.
-      </Nota>
     </SlideShell>
   );
 }
