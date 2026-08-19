@@ -55,13 +55,11 @@ export default function Slide08MVP() {
           icono="📅"
           titulo="Agente 1 — el que agenda"
           texto="Informa sobre el Estudio de Longevidad, hace el follow-up a los 7 días si no hubo respuesta, y confirma el turno."
-          etapas="Etapas 1→3: vence <90 días · contactado · EDL agendado"
         />
         <AgentCard
           icono="💳"
           titulo="Agente 2 — el que cobra"
           texto="Apenas se completa el EDL (o se cumplen los 14 días sin respuesta), envía el link de pago con la oferta que corresponda y escala a llamada si quedan <14 días sin pagar."
-          etapas="Etapa 4→7: EDL completado · link de pago · pagado / vencido"
         />
       </div>
 
