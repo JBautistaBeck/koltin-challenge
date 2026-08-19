@@ -5,9 +5,9 @@ import Slide01Portada from '../components/slides/Slide01Portada.jsx';
 import Slide02Problema from '../components/slides/Slide02Problema.jsx';
 import Slide03Hipotesis from '../components/slides/Slide03Hipotesis.jsx';
 import Slide04Reframe from '../components/slides/Slide04Reframe.jsx';
+import Slide08MVP from '../components/slides/Slide08MVP.jsx';
 import Slide05Funnel from '../components/slides/Slide05Funnel.jsx';
 import Slide07Scoring from '../components/slides/Slide07Scoring.jsx';
-import Slide08MVP from '../components/slides/Slide08MVP.jsx';
 import Slide09Octubre from '../components/slides/Slide09Octubre.jsx';
 import Slide11Metricas from '../components/slides/Slide11Metricas.jsx';
 import Slide12Cierre from '../components/slides/Slide12Cierre.jsx';
@@ -17,9 +17,9 @@ const SLIDES = [
   Slide02Problema,
   Slide03Hipotesis,
   Slide04Reframe,
+  Slide08MVP,
   Slide05Funnel,
   Slide07Scoring,
-  Slide08MVP,
   Slide09Octubre,
   Slide11Metricas,
   Slide12Cierre,

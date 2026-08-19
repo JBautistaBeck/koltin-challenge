@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import SlideShell, { Nota } from './SlideShell.jsx';
 import { CUADRANTES } from '../../data/constants.js';
 
@@ -182,6 +183,18 @@ export default function Slide07Scoring() {
         El cuadrante que resulta de este cruce es lo que decide, para cada cliente, en qué tono se le habla y qué se
         le ofrece (EDL, descuento, cuotas) — no es un número que se archiva.
       </Nota>
+
+      <div style={{ display: 'flex', justifyContent: 'center', marginTop: 18 }}>
+        <Link
+          to="/"
+          className="btn btn-primary"
+          style={{ fontSize: 15.5, padding: '14px 28px', textDecoration: 'none' }}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Ver la herramienta en vivo →
+        </Link>
+      </div>
     </SlideShell>
   );
 }

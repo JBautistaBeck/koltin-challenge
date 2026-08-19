@@ -52,10 +52,6 @@ export default function Slide03Hipotesis() {
         con alternativas de seguro, pesa más el precio.
       </p>
 
-      <Nota>
-        Esto es hipótesis basada en la info compartida; se validaría hablando con los 5 renovadores antes de asumir
-        nada.
-      </Nota>
     </SlideShell>
   );
 }

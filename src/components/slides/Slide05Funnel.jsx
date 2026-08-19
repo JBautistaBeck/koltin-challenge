@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import SlideShell, { Nota } from './SlideShell.jsx';
 import { TRIGGERS, TRIGGER_PAGO_ANTICIPADO, TRIGGER_ALERTA_URGENCIA } from '../../data/constants.js';
 
@@ -5,26 +6,26 @@ import { TRIGGERS, TRIGGER_PAGO_ANTICIPADO, TRIGGER_ALERTA_URGENCIA } from '../.
 // (cajas, textos, íconos), todo sobre el mismo sistema de coordenadas en px.
 // Sin librería de diagramas: liviano y fácil de tocar a mano.
 
-const W = 970;
+const W = 1000;
 const H = 340;
 
 const BOX = { w: 130, h: 60 };
 const BOX_END = { w: 140, h: 60 }; // cajas finales, un poco más anchas
 
-// A partir del punto de decisión se deja más aire (col3 en adelante) para que
-// las curvas de la ramificación no queden pegadas al borde de "Contactado".
+// Columna 1 (Vence <90 días) queda pegada al borde; todo lo demás se corre
+// +30 para que los badges de agente de las columnas 1 y 2 no se choquen.
 const POS = {
   vence90: { x: 20, y: 20, ...BOX },
-  contactado: { x: 170, y: 20, ...BOX },
-  edlAgendado: { x: 340, y: 20, ...BOX },
-  edlCompletado: { x: 490, y: 20, ...BOX },
-  linkPago: { x: 640, y: 140, w: 150, h: 60 },
-  pagado: { x: 810, y: 20, ...BOX_END },
-  sinEdl: { x: 340, y: 260, ...BOX },
-  vencido: { x: 810, y: 260, ...BOX_END },
+  contactado: { x: 200, y: 20, ...BOX },
+  edlAgendado: { x: 370, y: 20, ...BOX },
+  edlCompletado: { x: 520, y: 20, ...BOX },
+  linkPago: { x: 670, y: 140, w: 150, h: 60 },
+  pagado: { x: 840, y: 20, ...BOX_END },
+  sinEdl: { x: 370, y: 260, ...BOX },
+  vencido: { x: 840, y: 260, ...BOX_END },
 };
 
-const DIAMOND_CENTER = { x: 235, y: 170 };
+const DIAMOND_CENTER = { x: 265, y: 170 };
 const DIAMOND = { hw: 55, hh: 45 }; // half-width, half-height
 
 const triggerPorKey = Object.fromEntries(TRIGGERS.map((t) => [t.key, t]));
@@ -73,21 +74,76 @@ function FlowBox({ box, numero, letra, label, accent, sub }) {
   );
 }
 
-function TriggerBadge({ x, y, trigger }) {
+// Badge agrupado por agente: mismo color/etiqueta para todos los triggers de
+// ese agente, con un "!" que al pasar el mouse explica qué hace ESE trigger.
+function AgentBadge({ x, y, agente, trigger, align = 'center', tooltipArriba = false }) {
+  const [hover, setHover] = useState(false);
+  const color = agente === 1 ? 'var(--azul)' : 'var(--naranja)';
+  const bg = agente === 1 ? 'var(--azul-suave)' : 'var(--naranja-suave)';
+  const label = agente === 1 ? 'Agente 1 de agendamiento' : 'Agente 2 de cobranzas';
   return (
-    <div
-      title={trigger.tooltip}
-      style={{
-        position: 'absolute',
-        left: x - 11,
-        top: y,
-        fontSize: 15,
-        cursor: 'help',
-        lineHeight: 1,
-      }}
-      aria-label={trigger.tooltip}
-    >
-      {trigger.icono}
+    <div style={{ position: 'absolute', left: x, top: y, transform: 'translateX(-50%)', zIndex: hover ? 30 : 1 }}>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 5,
+          background: bg,
+          border: `1px solid ${color}`,
+          borderRadius: 999,
+          padding: '2px 7px 2px 8px',
+          whiteSpace: 'nowrap',
+        }}
+      >
+        <span style={{ fontSize: 9, fontWeight: 800, color }}>{label}</span>
+        <span
+          onMouseEnter={() => setHover(true)}
+          onMouseLeave={() => setHover(false)}
+          onFocus={() => setHover(true)}
+          onBlur={() => setHover(false)}
+          tabIndex={0}
+          role="button"
+          aria-label={trigger.tooltip}
+          style={{
+            width: 13,
+            height: 13,
+            flexShrink: 0,
+            borderRadius: '50%',
+            background: color,
+            color: '#fff',
+            fontSize: 9,
+            fontWeight: 800,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'help',
+          }}
+        >
+          !
+        </span>
+      </div>
+      {hover && (
+        <div
+          style={{
+            position: 'absolute',
+            ...(tooltipArriba ? { bottom: '100%', marginBottom: 6 } : { top: 22 }),
+            left: align === 'left' ? 0 : align === 'right' ? 'auto' : '50%',
+            right: align === 'right' ? 0 : 'auto',
+            transform: align === 'center' ? 'translateX(-50%)' : 'none',
+            background: 'var(--ink)',
+            color: '#fff',
+            fontSize: 11,
+            fontWeight: 500,
+            padding: '8px 10px',
+            borderRadius: 8,
+            width: 210,
+            lineHeight: 1.35,
+            boxShadow: '0 8px 20px rgba(0,0,0,0.25)',
+          }}
+        >
+          {trigger.tooltip}
+        </div>
+      )}
     </div>
   );
 }
@@ -177,22 +233,18 @@ export default function Slide05Funnel() {
           <FlowBox box={POS.vencido} numero={7} label="Vencido sin renovar" accent="var(--rojo)" />
           <FlowBox box={POS.sinEdl} letra="B" label="Sin EDL: link directo" accent="var(--naranja)" />
 
-          <TriggerBadge x={topCenter(POS.vence90).x} y={POS.vence90.y - 20} trigger={triggerPorKey.invitacion_edl} />
-          <TriggerBadge x={topCenter(POS.contactado).x} y={POS.contactado.y - 20} trigger={triggerPorKey.fup_7dias} />
-          <TriggerBadge x={topCenter(POS.edlCompletado).x} y={POS.edlCompletado.y - 20} trigger={triggerPorKey.descuento_msi} />
-          <TriggerBadge x={topCenter(POS.sinEdl).x} y={POS.sinEdl.y - 20} trigger={TRIGGER_PAGO_ANTICIPADO} />
-          <TriggerBadge x={topCenter(POS.linkPago).x} y={POS.linkPago.y - 20} trigger={TRIGGER_ALERTA_URGENCIA} />
+          <AgentBadge x={topCenter(POS.vence90).x} y={POS.vence90.y - 20} agente={1} trigger={triggerPorKey.invitacion_edl} align="left" />
+          <AgentBadge x={topCenter(POS.contactado).x} y={POS.contactado.y - 20} agente={1} trigger={triggerPorKey.fup_7dias} />
+          <AgentBadge x={topCenter(POS.edlCompletado).x} y={POS.edlCompletado.y - 20} agente={2} trigger={triggerPorKey.descuento_msi} />
+          <AgentBadge x={topCenter(POS.sinEdl).x} y={POS.sinEdl.y - 20} agente={2} trigger={TRIGGER_PAGO_ANTICIPADO} tooltipArriba />
+          <AgentBadge x={topCenter(POS.linkPago).x} y={POS.linkPago.y - 20} agente={2} trigger={TRIGGER_ALERTA_URGENCIA} />
         </div>
       </div>
 
-      <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', fontSize: 12, color: 'var(--ink-soft)', marginBottom: 16 }}>
-        {[...TRIGGERS, TRIGGER_PAGO_ANTICIPADO, TRIGGER_ALERTA_URGENCIA].map((t) => (
-          <div key={t.key} style={{ display: 'flex', alignItems: 'center', gap: 6, maxWidth: 260 }}>
-            <span>{t.icono}</span>
-            <span>{t.tooltip}</span>
-          </div>
-        ))}
-      </div>
+      <p style={{ margin: 0, fontSize: 14, fontWeight: 600, textAlign: 'center', color: 'var(--ink)' }}>
+        Ambos agentes deciden tono y oferta consultando un score de riesgo × engagement — así es como funciona ese
+        cálculo:
+      </p>
     </SlideShell>
   );
 }
