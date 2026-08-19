@@ -18,11 +18,6 @@ export default function Slide02Problema() {
         Desde octubre, un cambio macro en las tasas del seguro va a hacer los aumentos de precio todavía más
         grandes. Se espera una caída fuerte de renovaciones justo cuando eso pegue.
       </p>
-
-      <Nota>
-        <strong>Septiembre es la ventana.</strong> Es el último mes para tener un proceso nuevo funcionando antes de
-        que el aumento de octubre golpee la cartera.
-      </Nota>
     </SlideShell>
   );
 }
