@@ -180,10 +180,7 @@ export default function Slide07Scoring() {
 
       <Nota>
         El cuadrante que resulta de este cruce es lo que decide, para cada cliente, en qué tono se le habla y qué se
-        le ofrece (EDL, descuento, cuotas) — no es un número que se archiva. Es un modelo de reglas simples, no uno
-        predictivo entrenado con datos históricos: con data real de renovaciones pasadas, el siguiente paso sería
-        validar qué variables realmente correlacionan con no-renovación y ajustar los pesos, o entrenar un modelo
-        simple de scoring.
+        le ofrece (EDL, descuento, cuotas) — no es un número que se archiva.
       </Nota>
     </SlideShell>
   );
