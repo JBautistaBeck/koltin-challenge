@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 import Slide01Portada from '../components/slides/Slide01Portada.jsx';
 import Slide02Problema from '../components/slides/Slide02Problema.jsx';
+import Slide06DataRequest from '../components/slides/Slide06DataRequest.jsx';
 import Slide03Hipotesis from '../components/slides/Slide03Hipotesis.jsx';
 import Slide04Reframe from '../components/slides/Slide04Reframe.jsx';
 import Slide08MVP from '../components/slides/Slide08MVP.jsx';
@@ -15,6 +16,7 @@ import Slide12Cierre from '../components/slides/Slide12Cierre.jsx';
 const SLIDES = [
   Slide01Portada,
   Slide02Problema,
+  Slide06DataRequest,
   Slide03Hipotesis,
   Slide04Reframe,
   Slide08MVP,
