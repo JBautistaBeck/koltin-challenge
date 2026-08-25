@@ -181,7 +181,10 @@ export default function Slide06DataRequest() {
 
       <Nota>
         Esto se pidió por el canal de preguntas del challenge — la Parte 1 (diagnóstico) usa lo que se confirmó, y
-        marca explícitamente lo que sigue siendo supuesto.
+        marca explícitamente lo que sigue siendo supuesto. Una vez que esto se ponga en marcha, el paso clave va a
+        ser sentarse a hablar mucho con los renovadores: son quienes mejor conocen, en el día a día, dónde se traba
+        realmente el proceso — y esa conversación es la que termina de confirmar o corregir lo que acá todavía
+        queda como supuesto.
       </Nota>
     </SlideShell>
   );
