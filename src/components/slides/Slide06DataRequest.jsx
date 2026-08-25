@@ -173,7 +173,7 @@ function CategoriaCard({ icono, titulo, items }) {
 export default function Slide06DataRequest() {
   return (
     <SlideShell kicker="Antes de diagnosticar" title="Qué pedí, y por qué" wide>
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginBottom: 16 }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-start', gap: 12, marginBottom: 16 }}>
         {CATEGORIAS.map((c) => (
           <CategoriaCard key={c.key} icono={c.icono} titulo={c.titulo} items={c.items} />
         ))}
