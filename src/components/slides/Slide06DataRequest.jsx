@@ -39,6 +39,21 @@ const CATEGORIAS = [
         paraQue:
           'Dimensionar el piso real de retención posible, que nunca va a ser 100%, del margen donde el sistema puede mover la aguja.',
       },
+      {
+        corto: 'Tiempo promedio del EDL',
+        completo: 'Tiempo de agendado y completado del EDL',
+        contexto:
+          'Cuánto tarda en promedio un cliente en agendar turno y completar el Estudio de Longevidad, desde que se le invita por primera vez. El sistema propuesto usa una ventana de 90 días como punto de entrada, pero ese número es un supuesto propio (promediando sin dato real, considerando que puede depender de la disponibilidad de turnos).',
+        paraQue:
+          'Es la base temporal de todo el diseño del funnel (D-90, D-60, D-30); si el tiempo real de agendado + turno es distinto, hay que ajustar cuándo arranca el sistema.',
+      },
+      {
+        corto: 'Distribución por edad de la cartera',
+        completo: 'Distribución por bucket de edad',
+        contexto: 'Qué proporción de las renovaciones mensuales corresponde a cada bucket de edad (18-39, 40-63, 64+).',
+        paraQue:
+          "El sistema trata distinto a cada bucket (64+ sin alternativa de mercado vs. segmentos más jóvenes con opciones). Sin esta distribución, no se puede dimensionar si el 'camino B' del funnel (sin EDL completado) va a ser un caso marginal o un volumen significativo de la operación.",
+      },
     ],
   },
   {
