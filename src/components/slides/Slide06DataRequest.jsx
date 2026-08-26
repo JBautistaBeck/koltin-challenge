@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import SlideShell, { Nota } from './SlideShell.jsx';
 
-// Cada tarjeta es una categoría del data request; cada ítem es un acordeón
-// independiente. Colapsado: título corto (el "qué pedí"). Expandido: el
-// texto completo original + el "para qué" — nada se pierde, solo se oculta
-// por default para que la slide se lea de un vistazo en vivo.
+// Cada tarjeta es una categoría del data request; cada ítem muestra solo su
+// título corto (el "qué pedí") con un "+". El detalle completo (contexto +
+// "para qué") vive en un modal, no inline: así la slide nunca cambia de alto
+// sin importar qué se abra.
 const CATEGORIAS = [
   {
     key: 'proceso',
@@ -92,14 +92,11 @@ const CATEGORIAS = [
   },
 ];
 
-function AccordionItem({ item }) {
-  const [open, setOpen] = useState(false);
-
+function ItemRow({ item, onOpen }) {
   return (
     <div style={{ borderTop: '1px solid var(--border)' }}>
       <button
-        onClick={() => setOpen((o) => !o)}
-        aria-expanded={open}
+        onClick={() => onOpen(item)}
         style={{
           width: '100%',
           display: 'flex',
@@ -129,53 +126,108 @@ function AccordionItem({ item }) {
             fontSize: 12,
             fontWeight: 800,
             color: 'var(--ink-faint)',
-            transform: open ? 'rotate(45deg)' : 'none',
-            transition: 'transform 0.18s ease',
           }}
         >
           +
         </span>
       </button>
-
-      <div style={{ display: 'grid', gridTemplateRows: open ? '1fr' : '0fr', transition: 'grid-template-rows 0.22s ease' }}>
-        <div style={{ overflow: 'hidden' }}>
-          <div style={{ padding: '0 2px 14px', fontSize: 12.5, lineHeight: 1.55, color: 'var(--ink-soft)' }}>
-            {item.completo !== item.corto && (
-              <div style={{ fontWeight: 700, color: 'var(--ink)', marginBottom: 4 }}>{item.completo}</div>
-            )}
-            {item.contexto && <div style={{ marginBottom: 6 }}>{item.contexto}</div>}
-            <div>
-              <strong style={{ color: 'var(--ink)' }}>Para qué:</strong> {item.paraQue}
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }
 
-function CategoriaCard({ icono, titulo, items }) {
+function CategoriaCard({ icono, titulo, items, onOpenItem }) {
   return (
-    <div className="card" style={{ padding: '16px 18px 4px', flex: '1 1 260px', minWidth: 260 }}>
+    <div className="card" style={{ padding: '16px 18px 6px', flex: '1 1 260px', minWidth: 260 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 2 }}>
         <span style={{ fontSize: 18 }}>{icono}</span>
         <span style={{ fontWeight: 800, fontSize: 14.5 }}>{titulo}</span>
       </div>
       <div>
         {items.map((item, i) => (
-          <AccordionItem key={i} item={item} />
+          <ItemRow key={i} item={item} onOpen={onOpenItem} />
         ))}
       </div>
     </div>
   );
 }
 
+function ItemModal({ item, onClose }) {
+  useEffect(() => {
+    function onKey(e) {
+      if (e.key === 'Escape') onClose();
+    }
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [onClose]);
+
+  if (!item) return null;
+
+  return (
+    <>
+      <div
+        onClick={onClose}
+        style={{ position: 'fixed', inset: 0, background: 'rgba(32,30,27,0.45)', zIndex: 50 }}
+      />
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-label={item.completo}
+        style={{
+          position: 'fixed',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          zIndex: 51,
+          width: 'min(520px, calc(100vw - 48px))',
+          maxHeight: 'calc(100vh - 96px)',
+          overflowY: 'auto',
+          background: '#fff',
+          borderRadius: 'var(--radius-lg)',
+          boxShadow: '0 20px 60px rgba(0,0,0,0.28)',
+          border: '1px solid var(--border)',
+          padding: '22px 24px 24px',
+        }}
+      >
+        <button
+          onClick={onClose}
+          className="btn"
+          style={{ padding: '6px 12px', fontSize: 13, marginBottom: 16 }}
+        >
+          ✕ Cerrar
+        </button>
+
+        <h3 style={{ margin: '0 0 12px', fontSize: 18, fontWeight: 800, color: 'var(--ink)', lineHeight: 1.35 }}>
+          {item.completo}
+        </h3>
+
+        {item.contexto && (
+          <p style={{ margin: '0 0 12px', fontSize: 14, lineHeight: 1.6, color: 'var(--ink-soft)' }}>
+            {item.contexto}
+          </p>
+        )}
+
+        <p style={{ margin: 0, fontSize: 14, lineHeight: 1.6, color: 'var(--ink-soft)' }}>
+          <strong style={{ color: 'var(--ink)' }}>Para qué:</strong> {item.paraQue}
+        </p>
+      </div>
+    </>
+  );
+}
+
 export default function Slide06DataRequest() {
+  const [itemAbierto, setItemAbierto] = useState(null);
+
   return (
     <SlideShell kicker="Antes de diagnosticar" title="Qué pedí, y por qué" wide>
       <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-start', gap: 12, marginBottom: 16 }}>
         {CATEGORIAS.map((c) => (
-          <CategoriaCard key={c.key} icono={c.icono} titulo={c.titulo} items={c.items} />
+          <CategoriaCard
+            key={c.key}
+            icono={c.icono}
+            titulo={c.titulo}
+            items={c.items}
+            onOpenItem={setItemAbierto}
+          />
         ))}
       </div>
 
@@ -186,6 +238,8 @@ export default function Slide06DataRequest() {
         realmente el proceso — y esa conversación es la que termina de confirmar o corregir lo que acá todavía
         queda como supuesto.
       </Nota>
+
+      <ItemModal item={itemAbierto} onClose={() => setItemAbierto(null)} />
     </SlideShell>
   );
 }
